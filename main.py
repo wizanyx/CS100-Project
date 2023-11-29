@@ -9,13 +9,14 @@ HEIGHT = 500
 gamestate = 0
 
 def on_key_down(key):
+    global gamestate
     # Exit Game
     if key == keys.ESCAPE:
         sys.exit()
-    # Enter Game - Not working and I don't know why :(
-    #if gamestate == 0:
-     #   if key == keys.SPACE:
-      #      gamestate = 1
+    # Enter Game
+    if gamestate == 0:
+        if key == keys.SPACE:
+            gamestate = 1
             
         
 
@@ -38,8 +39,6 @@ def update():
     
     # Run Draw Function
     draw()
-    
-    print(gamestate)
 
 pgzrun.go()
 
