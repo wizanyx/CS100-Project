@@ -121,8 +121,8 @@ def draw():
         elif e_hp > 0:
             screen.blit('health_dmg', (enemy_hp_bar_loc))
         # Draw Character Names
-        screen.draw.text(e_name, (e_name_loc), color='black')
-        screen.draw.text(p_name, (p_name_loc), color='black')    
+        screen.draw.text(game.bot.current_deck.current_character.name, (e_name_loc), color='black')
+        screen.draw.text(game.player.current_deck.current_character.name, (p_name_loc), color='black')    
         # Draw Red Xs
         if run:
             screen.blit('denied', (run_x_loc))
