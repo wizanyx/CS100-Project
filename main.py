@@ -1,7 +1,8 @@
-import pgzrun
-import random
 import sys
+from structures.character import *
+from data.characters import characters
 
+# Basic Setup
 TITLE = 'Battle!'
 WIDTH = 480
 HEIGHT = 320
@@ -32,6 +33,29 @@ e_name = "Dog.jpg"
 p_hp = 100
 p_hp_max = 100
 p_name = "Man"
+
+
+class Game(object):
+    def __init__(self):
+        self.gamestate = 0
+        self.characters = {}
+
+        self.player = Player(self.characters["Man"])
+        self.bot = Player(self.characters["Dog"], True)
+
+    def load_characters(self):
+        for character in characters:
+            character["moves"] = self.load_moves(character["moves"])
+            self.characters[character["name"]] = (Character(**character))
+
+    def load_moves(self, moves):
+        _moves = []
+        for move in moves:
+            if move.get("status"):
+                status = Status(**move["status"])
+                move["status"] = status
+            _moves.append(Move(**move))
+        return _moves
 
 
 def on_key_down(key):
