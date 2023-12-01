@@ -12,23 +12,30 @@ player_hp_bar_loc = 348, 182
 run = False
 party = False
 bag = False
+fight = False
 run_x_loc = 366, 270
 party_x_loc = 266, 273
 bag_x_loc = 366, 239
-
+mov_one_loc = 20, 240
+mov_two_loc = 160, 240
+mov_three_loc = 20, 274
+e_name_loc = 42, 42
+p_name_loc = 284, 158
 
 gamestate = 0
 
 # Testing Variables to be replaced with actual numbers
 e_hp = 100
 e_hp_max = 100
+e_name = "Dog.jpg"
 
 p_hp = 100
 p_hp_max = 100
+p_name = "Man"
 
 
 def on_key_down(key):
-    global gamestate
+    global gamestate, fight
     # Exit Game
     if key == keys.ESCAPE:
         sys.exit()
@@ -36,6 +43,10 @@ def on_key_down(key):
     if gamestate == 0:
         if key == keys.SPACE:
             gamestate = 1
+    # Choose Fight
+    if gamestate == 1:
+        if key == keys.RETURN:
+            fight = True
             
     
         
@@ -70,6 +81,9 @@ def draw():
             screen.blit('health_some_dmg', (enemy_hp_bar_loc))
         elif e_hp > 0:
             screen.blit('health_dmg', (enemy_hp_bar_loc))
+        # Draw Character Names
+        screen.draw.text(e_name, (e_name_loc), color='black')
+        screen.draw.text(p_name, (p_name_loc), color='black')    
         # Draw Red Xs
         if run:
             screen.blit('denied', (run_x_loc))
@@ -77,6 +91,13 @@ def draw():
             screen.blit('denied', (bag_x_loc))
         if party:
             screen.blit('denied', (party_x_loc))
+        # Draw moves list if Fight is selected
+        if fight:
+            screen.blit('battle_moves', (0,224))
+            screen.draw.text("Move One", (mov_one_loc), color='black')
+            screen.draw.text("Move Two", (mov_two_loc), color='black')
+            screen.draw.text("Move Three", (mov_three_loc), color='black')
+            
             
         
     
