@@ -1,8 +1,8 @@
 import random
+import pgzrun
 
 
 class Status:
-
     def __init__(self, dmg_boost: int, def_boost: int, duration: int = 1, carry_over: bool = False):
         self.dmg_boost = dmg_boost
         self.def_boost = def_boost
@@ -17,6 +17,7 @@ class Move:
         self.dmg = dmg
         self.percent = percent
         self.status = status
+        self.actor = Actor("moves/" + self.name)
 
 
 class Character:
@@ -26,6 +27,7 @@ class Character:
         self.hp = self.hp_max
         self._moves = moves
         self.status: list[Status] = []
+        self.actor = Actor("characters/" + self.name)
 
     @property
     def moves(self):
@@ -62,7 +64,7 @@ class Character:
 
     @property
     def damage_boost(self):
-        boost = 0
+        boost = 100
         for status in self.status:
             boost += status.dmg_boost
         return boost/100
@@ -100,11 +102,16 @@ class Deck:
 
 
 class Player:
-    def __init__(self, base_character: Character):
+    def __init__(self, base_character: Character, bot=False):
         self.characters = [base_character]
         self.current_deck = Deck(self.characters)
+        self.bot = bot
 
     def new_deck(self):
         random.shuffle(self.characters)
         self.current_deck = Deck(self.characters[:4])
+
+    @property
+    def current_action(self):
+        return ""
 
