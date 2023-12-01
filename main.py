@@ -3,10 +3,29 @@ import random
 import sys
 
 TITLE = 'Battle!'
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 480
+HEIGHT = 320
+
+#Graphics Locations
+enemy_hp_bar_loc = 104, 66
+player_hp_bar_loc = 348, 182
+run = False
+party = False
+bag = False
+run_x_loc = 366, 270
+party_x_loc = 266, 273
+bag_x_loc = 366, 239
+
 
 gamestate = 0
+
+# Testing Variables to be replaced with actual numbers
+e_hp = 100
+e_hp_max = 100
+
+p_hp = 100
+p_hp_max = 100
+
 
 def on_key_down(key):
     global gamestate
@@ -18,6 +37,7 @@ def on_key_down(key):
         if key == keys.SPACE:
             gamestate = 1
             
+    
         
 
 def draw():
@@ -25,14 +45,40 @@ def draw():
     screen.fill((0, 0, 50))
     # Draw Main Menu for Gamestate = 0
     if gamestate == 0:
-        screen.blit('title', (20, 100))
-        screen.draw.text("Welcome to:", (20, 90))
+        screen.blit('title', (20, 20))
+        screen.draw.text("Welcome to:", (20, 10))
         screen.draw.text("Space = Start", (60, 200))
         screen.draw.text("Esc = Exit", (60, 250))
         screen.blit('man_front', (10, 300))
         screen.blit('dog', (300, 300))
+    # Draw Battle for Gamestate = 1
     elif gamestate == 1:
-        screen.draw.text("Woah! It's a game!!!!!!!", (60, 200))
+        screen.blit('battle_background', (0, 0))
+        screen.blit('battle_text', (0,224))
+        screen.blit('battle_choice', (240,224))
+        # Draw Player HP
+        if p_hp > p_hp_max/50:
+            screen.blit('health', (player_hp_bar_loc))
+        elif p_hp >= p_hp_max/25:
+            screen.blit('health_some_dmg', (player_hp_bar_loc))
+        elif p_hp > 0:
+            screen.blit('health_dmg', (player_hp_bar_loc))
+        # Draw Enemy HP    
+        if e_hp > e_hp_max/2:
+            screen.blit('health', (enemy_hp_bar_loc))
+        elif e_hp >= e_hp_max/4:
+            screen.blit('health_some_dmg', (enemy_hp_bar_loc))
+        elif e_hp > 0:
+            screen.blit('health_dmg', (enemy_hp_bar_loc))
+        # Draw Red Xs
+        if run:
+            screen.blit('denied', (run_x_loc))
+        if bag:
+            screen.blit('denied', (bag_x_loc))
+        if party:
+            screen.blit('denied', (party_x_loc))
+            
+        
     
 
 def update():
