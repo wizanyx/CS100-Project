@@ -10,35 +10,33 @@ class Status:
         self.carry_over = carry_over
 
 
-class Move:
+class BaseMove:
     def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
         self.name = name
         self.speed = speed
         self.dmg = dmg
         self.percent = percent
         self.status = status
-        self.actor = Actor("moves/" + self.name)
 
 
-class Character:
-    def __init__(self, name: str, hp: int, moves: list[Move]):
+class BaseCharacter:
+    def __init__(self, name: str, hp: int, moves: list[BaseMove]):
         self.name = name
         self.hp_max = hp
         self.hp = self.hp_max
         self._moves = moves
         self.status: list[Status] = []
-        self.actor = Actor("characters/" + self.name)
 
     @property
     def moves(self):
         random.shuffle(self._moves)
         return self._moves[0:3]
 
-    def do_move(self, move: Move):
+    def do_move(self, move: BaseMove):
         if move.status:
             self.status.append(move.status)
 
-    def take_dmg(self, move: Move, boost):
+    def take_dmg(self, move: BaseMove, boost):
         dmg = self.hp_max * move.dmg/100 if move.percent else move.dmg
         final_dmg = dmg * boost * self.defense_boost
         self.hp -= final_dmg
@@ -82,7 +80,7 @@ class Character:
 
 
 class Deck:
-    def __init__(self, characters: list[Character]):
+    def __init__(self, characters: list[BaseCharacter]):
         random.shuffle(characters)
         self.characters = characters
         self.pos = 0
@@ -94,7 +92,7 @@ class Deck:
         self.current_character = self.characters[self.pos]
         self.current_character.status = carry
 
-    def attack(self, prompt_move, opponent: Character):
+    def attack(self, prompt_move, opponent: BaseCharacter):
         moves = self.current_character.moves
         selected_move = prompt_move(moves)
         self.current_character.do_move(selected_move)
@@ -102,7 +100,7 @@ class Deck:
 
 
 class Player:
-    def __init__(self, base_character: Character, bot=False):
+    def __init__(self, base_character: BaseCharacter, bot=False):
         self.characters = [base_character]
         self.current_deck = Deck(self.characters)
         self.bot = bot

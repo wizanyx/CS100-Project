@@ -35,10 +35,24 @@ p_hp_max = 100
 p_name = "Man"
 
 
+class Move(BaseMove):
+    def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
+        BaseMove.__init__(self, name, dmg, speed, percent, status)
+        self.actor = Actor("moves/" + self.name.lower())
+
+
+class Character(BaseCharacter):
+    def __init__(self, name: str, hp: int, moves: list[Move]):
+        BaseCharacter.__init__(self, name, hp, moves)
+        self.actor = Actor("characters/" + self.name.lower())
+
+
 class Game(object):
     def __init__(self):
         self.gamestate = 0
         self.characters = {}
+
+        self.load_characters()
 
         self.player = Player(self.characters["Man"])
         self.bot = Player(self.characters["Dog"], True)
@@ -57,6 +71,7 @@ class Game(object):
             _moves.append(Move(**move))
         return _moves
 
+game = Game()
 
 def on_key_down(key):
     global gamestate, fight
