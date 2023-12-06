@@ -33,16 +33,6 @@ MOVE_ARROW_LOC = [(20, 245), (160, 245), (20, 274)]
 
 gamestate = 0
 
-# Testing Variables to be replaced with actual numbers
-e_hp = 100
-e_hp_max = 100
-e_name = "Dog.jpg"
-
-p_hp = 100
-p_hp_max = 100
-p_name = "Man"
-
-
 class Move(BaseMove):
     def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
         BaseMove.__init__(self, name, dmg, speed, percent, status)
