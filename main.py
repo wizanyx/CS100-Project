@@ -12,9 +12,11 @@ HEIGHT = 320
 
 PLAYER_HP_BAR_LOC = 348, 182
 PLAYER_NAME_LOC = 284, 158
+PLAYER_SPITE_LOC = 51, 96
 
 BOT_HP_BAR_LOC = 104, 66
 BOT_NAME_LOC = 42, 42
+BOT_SPRITE_LOC = 283, 13
 
 
 run = False
@@ -23,7 +25,9 @@ bag = False
 fight = False
 
 DENIED_CHOICE_LOC = [(366, 239), (266, 273), (366, 270)]
-MOVE_CHOICE_LOC = [(20, 240), (160, 240), (20, 274)]
+MOVE_CHOICE_LOC = [(32, 245), (172, 245), (32, 274)]
+CHOICE_ARROW_LOC = [(258, 248), (370, 248), (258, 280), (370, 280)]
+MOVE_ARROW_LOC = [(20, 245), (160, 245), (20, 274)]
 
 
 
@@ -101,12 +105,19 @@ class Game(object):
         screen.blit(self.player.current_character.hp_bar, PLAYER_HP_BAR_LOC)
         #   Character Name
         screen.draw.text(self.player.current_character.name, PLAYER_NAME_LOC, color='black')
+        #   Character Sprite
+        screen.blit(self.player.current_character.actor, PLAYER_SPITE_LOC)
 
         # Draw Bot
         #   HP Bar
         screen.blit(self.bot.current_character.hp_bar, BOT_HP_BAR_LOC)
         #   Character Name
         screen.draw.text(self.bot.current_character.name, BOT_NAME_LOC, color='black')
+        #   Character Sprite
+        screen.blit('characters/dog', BOT_SPRITE_LOC)
+        
+
+        
 
     def display_choice_menu(self):
         if self.choice_menu.type == 0:
@@ -115,12 +126,17 @@ class Game(object):
             for denied_no in range(3):
                 if self.choice_menu.denied[denied_no]:
                     screen.blit('denied', DENIED_CHOICE_LOC[denied_no])
+            # Draw Arrow
+            screen.blit('choice_arrow', CHOICE_ARROW_LOC[self.choice_menu.pos])
         else:
             screen.blit('battle_moves', (0, 224))
             move_no = 0
+            # Draw Move Names
             for move in self.choice_menu.choices:
                 screen.draw.text(move.name, MOVE_CHOICE_LOC[move_no], color='black')
                 move_no += 1
+            # Draw Move Arrow
+            screen.blit('choice_arrow', MOVE_ARROW_LOC[self.choice_menu.pos])
 
     def handle_inputs(self, key):
         if key == keys.ESCAPE:
