@@ -61,7 +61,7 @@ class Game(object):
         self.game_state = 0
         self.characters = {}
         self.choice_menu = ChoiceMenu([], 0)
-        self.move_display = False
+        self.move_text_display = False
         self.display_log = []
 
         self.load_characters()
@@ -101,8 +101,6 @@ class Game(object):
         screen.blit('battle_background', (0, 0))
         screen.blit('battle_text', (0, 224))
 
-        self.display_choice_menu()
-
         # Draw Player
         #   HP Bar
         screen.blit(self.player.current_character.hp_bar, PLAYER_HP_BAR_LOC)
@@ -118,6 +116,12 @@ class Game(object):
         screen.draw.text(self.bot.current_character.name, BOT_NAME_LOC, color='black')
         #   Character Sprite
         self.bot.current_character.actor.draw()
+
+        if self.move_text_display:
+            self.display_battle_text()
+        else:
+            self.display_choice_menu()
+
 
     def display_choice_menu(self):
         if self.choice_menu.type == 0:
@@ -138,6 +142,29 @@ class Game(object):
             # Draw Move Arrow
             screen.blit('choice_arrow', MOVE_ARROW_LOC[self.choice_menu.pos])
 
+    def display_battle_text(self):
+        display_text = self.display_log[0]
+        if type(display_text) == str:
+            screen.draw.text(display_text, (32, 245), color='white')
+        elif type(display_text) == tuple:
+            print(self.display_log)
+            if display_text[0]:
+                del self.display_log[0]
+                if not self.display_log:
+                    self.move_text_display = False
+                    self.display_choice_menu()
+                else:
+                    self.display_battle_text()
+            else:
+                char = display_text[1]
+                screen.draw.text(f"{char.name} died! RIP!", (32, 245), color='white')
+                if char.camp == 0:
+                    self.player.deck.character_death()
+                else:
+                    self.bot.deck.character_death()
+        else:
+            screen.draw.text(display_text.name, (32, 245), color='white')
+
     def handle_inputs(self, key):
         if key == keys.ESCAPE:
             sys.exit()
@@ -145,17 +172,20 @@ class Game(object):
         if self.game_state == 0:
             if key == keys.SPACE:
                 self.game_state = 1
-        elif self.game_state == 1 and not self.move_display:
+        elif self.game_state == 1 and not self.move_text_display:
             if self.choice_menu.handle_input(key, keys):
                 if self.choice_menu.choice == 0:
                     self.choice_menu = ChoiceMenu(self.player.current_character.moves)
                 else:
                     print(self.display_log)
                     player_result = self.player.attack(self.choice_menu.choice, self.bot.current_character)
-                    self.display_log.append(player_result)
+                    self.display_log.extend(player_result)
                     if player_result[2][0]:
-                        self.display_log.append(self.bot.attack(self.player.current_character))
-                    self.move_display = True
+                        self.display_log.extend(self.bot.attack(self.player.current_character))
+                    self.move_text_display = True
+        elif self.move_text_display:
+            if key == keys.SPACE:
+                del self.display_log[0]
 
     @staticmethod
     def load_moves(moves):

@@ -104,10 +104,10 @@ class Deck:
     def attack(self, move: BaseMove, opponent: BaseCharacter):
         self.current_character.do_move(move)
         alive = opponent.take_dmg(move, self.current_character.damage_boost)
-        return [f"{self.current_character.name} used {move.name}!", move, (not alive, f"{opponent} died! RIP!")]
+        return [f"{self.current_character.name} used {move.name}!", move, (alive, opponent)]
 
     def bot_attack(self, opponent: BaseCharacter):
-        self.attack(random.choice(self.current_character.moves),opponent)
+        return self.attack(random.choice(self.current_character.moves),opponent)
 
 
 class Player:
