@@ -217,4 +217,3 @@ def draw():
 
 
 pgzrun.go()
-
