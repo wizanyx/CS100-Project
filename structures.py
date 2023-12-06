@@ -19,12 +19,13 @@ class BaseMove:
 
 
 class BaseCharacter:
-    def __init__(self, name: str, hp: int, moves: list[BaseMove]):
+    def __init__(self, name: str, hp: int, moves: list[BaseMove], camp: int):
         self.name = name
         self.hp_max = hp
         self.hp = self.hp_max
         self._moves = moves
         self.status: list[Status] = []
+        self.camp = camp
 
     @property
     def moves(self):
@@ -80,7 +81,7 @@ class BaseCharacter:
         boost = 0
         for status in self.status:
             boost += status.def_boost
-        return 1 - boost/100
+        return 1 - boost/100 if boost < 90 else 0.1
 
     @property
     def alive(self):
@@ -102,10 +103,12 @@ class Deck:
 
     def attack(self, move: BaseMove, opponent: BaseCharacter):
         self.current_character.do_move(move)
-        opponent.take_dmg(move, self.current_character.damage_boost)
+        alive = opponent.take_dmg(move, self.current_character.damage_boost)
+        return [f"{self.current_character.name} used {move.name}!", move, (not alive, f"{opponent} died! RIP!")]
 
     def bot_attack(self, opponent: BaseCharacter):
         self.attack(random.choice(self.current_character.moves),opponent)
+
 
 class Player:
     def __init__(self, base_character: BaseCharacter, bot=False):

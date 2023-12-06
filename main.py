@@ -46,13 +46,14 @@ p_name = "Man"
 class Move(BaseMove):
     def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
         BaseMove.__init__(self, name, dmg, speed, percent, status)
-        self.actor = Actor("moves/" + self.name.lower())
+        self.actor = Actor("moves/" + self.name.lower().replace(" ", "_"))
 
 
 class Character(BaseCharacter):
-    def __init__(self, name: str, hp: int, moves: list[Move]):
-        BaseCharacter.__init__(self, name, hp, moves)
-        self.actor = Actor("characters/" + self.name.lower())
+    def __init__(self, name: str, hp: int, moves: list[Move], camp: int):
+        BaseCharacter.__init__(self, name, hp, moves, camp)
+        self.actor = Actor("characters/" + self.name.lower().replace(" ", "_"))
+        self.actor.topleft = PLAYER_SPITE_LOC if self.camp == 0 else BOT_SPRITE_LOC
 
 
 class Game(object):
@@ -60,6 +61,8 @@ class Game(object):
         self.game_state = 0
         self.characters = {}
         self.choice_menu = ChoiceMenu([], 0)
+        self.move_display = False
+        self.display_log = []
 
         self.load_characters()
 
@@ -106,7 +109,7 @@ class Game(object):
         #   Character Name
         screen.draw.text(self.player.current_character.name, PLAYER_NAME_LOC, color='black')
         #   Character Sprite
-        screen.blit(self.player.current_character.actor, PLAYER_SPITE_LOC)
+        self.player.current_character.actor.draw()
 
         # Draw Bot
         #   HP Bar
@@ -114,10 +117,7 @@ class Game(object):
         #   Character Name
         screen.draw.text(self.bot.current_character.name, BOT_NAME_LOC, color='black')
         #   Character Sprite
-        screen.blit('characters/dog', BOT_SPRITE_LOC)
-        
-
-        
+        self.bot.current_character.actor.draw()
 
     def display_choice_menu(self):
         if self.choice_menu.type == 0:
@@ -145,14 +145,17 @@ class Game(object):
         if self.game_state == 0:
             if key == keys.SPACE:
                 self.game_state = 1
-        elif self.game_state == 1:
+        elif self.game_state == 1 and not self.move_display:
             if self.choice_menu.handle_input(key, keys):
                 if self.choice_menu.choice == 0:
                     self.choice_menu = ChoiceMenu(self.player.current_character.moves)
                 else:
-                    print(self.bot.current_character.hp)
-                    self.player.attack(self.choice_menu.choice, self.bot.current_character)
-                    self.bot.attack(self.player.current_character)
+                    print(self.display_log)
+                    player_result = self.player.attack(self.choice_menu.choice, self.bot.current_character)
+                    self.display_log.append(player_result)
+                    if player_result[2][0]:
+                        self.display_log.append(self.bot.attack(self.player.current_character))
+                    self.move_display = True
 
     @staticmethod
     def load_moves(moves):

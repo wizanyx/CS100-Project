@@ -13,7 +13,8 @@ characters = [
                 "speed": 4,
                 "percent": True
             }
-        ]
+        ],
+        "camp": 0
     }, {
         "name": "Dog",
         "hp": 80,
@@ -33,6 +34,7 @@ characters = [
                     "duration": 2
                 }
             }
-        ]
+        ],
+        "camp": 1
     }
 ]
