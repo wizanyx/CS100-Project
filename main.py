@@ -1,15 +1,22 @@
 import sys
-from structures.character import *
-from data.characters import characters
+import pgzrun
+from structures import *
+from data import characters
 
 # Basic Setup
 TITLE = 'Battle!'
 WIDTH = 480
 HEIGHT = 320
 
-#Graphics Locations
-enemy_hp_bar_loc = 104, 66
-player_hp_bar_loc = 348, 182
+# Graphics Locations
+
+PLAYER_HP_BAR_LOC = 348, 182
+PLAYER_NAME_LOC = 284, 158
+
+BOT_HP_BAR_LOC = 104, 66
+BOT_NAME_LOC = 42, 42
+
+
 run = False
 party = False
 bag = False
@@ -20,8 +27,7 @@ bag_x_loc = 366, 239
 mov_one_loc = 20, 240
 mov_two_loc = 160, 240
 mov_three_loc = 20, 274
-e_name_loc = 42, 42
-p_name_loc = 284, 158
+
 
 gamestate = 0
 
@@ -49,7 +55,7 @@ class Character(BaseCharacter):
 
 class Game(object):
     def __init__(self):
-        self.gamestate = 0
+        self.game_state = 0
         self.characters = {}
 
         self.load_characters()
@@ -62,7 +68,56 @@ class Game(object):
             character["moves"] = self.load_moves(character["moves"])
             self.characters[character["name"]] = (Character(**character))
 
-    def load_moves(self, moves):
+    def draw_screen(self):
+        screen.fill((0, 0, 50))
+
+        if self.game_state == 0:
+            print(self.game_state)
+            self.display_main_screen()
+        elif self.game_state == 1:
+            self.display_battle_screen()
+
+    def display_main_screen(self):
+        global screen
+
+        screen.blit('title', (20, 20))
+        screen.draw.text("Welcome to:", (20, 10))
+        screen.draw.text("Space = Start", (60, 200))
+        screen.draw.text("Esc = Exit", (60, 250))
+        screen.blit('man_front', (10, 300))
+        screen.blit('dog', (300, 300))
+
+    def display_battle_screen(self):
+        global screen
+
+        # Battle Screen Background
+        screen.blit('battle_background', (0, 0))
+        screen.blit('battle_text', (0, 224))
+        screen.blit('battle_choice', (240, 224))
+
+        # Draw Player
+        #   HP Bar
+        screen.blit(self.player.current_character.hp_bar, PLAYER_HP_BAR_LOC)
+        #   Character Name
+        screen.draw.text(self.player.current_character.name, PLAYER_NAME_LOC, color='black')
+
+        # Draw Bot
+        #   HP Bar
+        screen.blit(self.bot.current_character.hp_bar, BOT_HP_BAR_LOC)
+        #   Character Name
+        screen.draw.text(self.bot.current_character.name, BOT_NAME_LOC, color='black')
+
+    def handle_inputs(self, key):
+        print(self.game_state)
+        if key == keys.ESCAPE:
+            sys.exit()
+
+        if self.game_state == 0:
+            if key == keys.SPACE:
+                self.game_state = 1
+
+    @staticmethod
+    def load_moves(moves):
         _moves = []
         for move in moves:
             if move.get("status"):
@@ -71,58 +126,23 @@ class Game(object):
             _moves.append(Move(**move))
         return _moves
 
+
 game = Game()
 
+
 def on_key_down(key):
-    global gamestate, fight
-    # Exit Game
-    if key == keys.ESCAPE:
-        sys.exit()
-    # Enter Game
-    if gamestate == 0:
-        if key == keys.SPACE:
-            gamestate = 1
-    # Choose Fight
-    if gamestate == 1:
-        if key == keys.RETURN:
-            fight = True
-            
-    
-        
+    game.handle_inputs(key)
+
 
 def draw():
     # Clear Screen
     screen.fill((0, 0, 50))
     # Draw Main Menu for Gamestate = 0
-    if gamestate == 0:
-        screen.blit('title', (20, 20))
-        screen.draw.text("Welcome to:", (20, 10))
-        screen.draw.text("Space = Start", (60, 200))
-        screen.draw.text("Esc = Exit", (60, 250))
-        screen.blit('man_front', (10, 300))
-        screen.blit('dog', (300, 300))
+    if game.game_state == 0:
+        game.display_main_screen()
     # Draw Battle for Gamestate = 1
-    elif gamestate == 1:
-        screen.blit('battle_background', (0, 0))
-        screen.blit('battle_text', (0,224))
-        screen.blit('battle_choice', (240,224))
-        # Draw Player HP
-        if p_hp > p_hp_max/50:
-            screen.blit('health', (player_hp_bar_loc))
-        elif p_hp >= p_hp_max/25:
-            screen.blit('health_some_dmg', (player_hp_bar_loc))
-        elif p_hp > 0:
-            screen.blit('health_dmg', (player_hp_bar_loc))
-        # Draw Enemy HP    
-        if e_hp > e_hp_max/2:
-            screen.blit('health', (enemy_hp_bar_loc))
-        elif e_hp >= e_hp_max/4:
-            screen.blit('health_some_dmg', (enemy_hp_bar_loc))
-        elif e_hp > 0:
-            screen.blit('health_dmg', (enemy_hp_bar_loc))
-        # Draw Character Names
-        screen.draw.text(game.bot.current_deck.current_character.name, (e_name_loc), color='black')
-        screen.draw.text(game.player.current_deck.current_character.name, (p_name_loc), color='black')    
+    elif game.game_state == 1:
+        game.display_battle_screen()
         # Draw Red Xs
         if run:
             screen.blit('denied', (run_x_loc))
@@ -145,6 +165,7 @@ def update():
     
     # Run Draw Function
     draw()
+    #game.draw_screen()
 
 pgzrun.go()
 

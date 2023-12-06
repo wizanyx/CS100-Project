@@ -1,5 +1,4 @@
 import random
-import pgzrun
 
 
 class Status:
@@ -53,6 +52,15 @@ class BaseCharacter:
         self.status = _status
 
     @property
+    def hp_bar(self):
+        if self.hp > self.hp_max*2/3:
+            return "health"
+        elif self.hp > self.hp_max/3:
+            return "health_some_dmg"
+        else:
+            return "health_dmg"
+
+    @property
     def carry_status(self):
         _status = []
         for status in self.status:
@@ -102,14 +110,17 @@ class Deck:
 class Player:
     def __init__(self, base_character: BaseCharacter, bot=False):
         self.characters = [base_character]
-        self.current_deck = Deck(self.characters)
+        self.deck = Deck(self.characters)
         self.bot = bot
 
     def new_deck(self):
-        random.shuffle(self.characters)
-        self.current_deck = Deck(self.characters[:4])
+        self.deck = Deck(self.characters[:4])
 
     @property
     def current_action(self):
         return ""
+
+    @property
+    def current_character(self):
+        return self.deck.current_character
 
