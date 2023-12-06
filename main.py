@@ -21,12 +21,10 @@ run = False
 party = False
 bag = False
 fight = False
-run_x_loc = 366, 270
-party_x_loc = 266, 273
-bag_x_loc = 366, 239
-mov_one_loc = 20, 240
-mov_two_loc = 160, 240
-mov_three_loc = 20, 274
+
+DENIED_CHOICE_LOC = [(366, 239), (266, 273), (366, 270)]
+MOVE_CHOICE_LOC = [(20, 240), (160, 240), (20, 274)]
+
 
 
 gamestate = 0
@@ -57,6 +55,7 @@ class Game(object):
     def __init__(self):
         self.game_state = 0
         self.characters = {}
+        self.choice_menu = ChoiceMenu([], 0)
 
         self.load_characters()
 
@@ -77,7 +76,8 @@ class Game(object):
         elif self.game_state == 1:
             self.display_battle_screen()
 
-    def display_main_screen(self):
+    @staticmethod
+    def display_main_screen():
         global screen
 
         screen.blit('title', (20, 20))
@@ -93,7 +93,8 @@ class Game(object):
         # Battle Screen Background
         screen.blit('battle_background', (0, 0))
         screen.blit('battle_text', (0, 224))
-        screen.blit('battle_choice', (240, 224))
+
+        self.display_choice_menu()
 
         # Draw Player
         #   HP Bar
@@ -107,14 +108,35 @@ class Game(object):
         #   Character Name
         screen.draw.text(self.bot.current_character.name, BOT_NAME_LOC, color='black')
 
+    def display_choice_menu(self):
+        if self.choice_menu.type == 0:
+            screen.blit('battle_choice', (240, 224))
+            # Draw Denied Boxes
+            for denied_no in range(3):
+                if self.choice_menu.denied[denied_no]:
+                    screen.blit('denied', DENIED_CHOICE_LOC[denied_no])
+        else:
+            screen.blit('battle_moves', (0, 224))
+            move_no = 0
+            for move in self.choice_menu.choices:
+                screen.draw.text(move.name, MOVE_CHOICE_LOC[move_no], color='black')
+                move_no += 1
+
     def handle_inputs(self, key):
-        print(self.game_state)
         if key == keys.ESCAPE:
             sys.exit()
 
         if self.game_state == 0:
             if key == keys.SPACE:
                 self.game_state = 1
+        elif self.game_state == 1:
+            if self.choice_menu.handle_input(key, keys):
+                if self.choice_menu.choice == 0:
+                    self.choice_menu = ChoiceMenu(self.player.current_character.moves)
+                else:
+                    print(self.bot.current_character.hp)
+                    self.player.attack(self.choice_menu.choice, self.bot.current_character)
+                    self.bot.attack(self.player.current_character)
 
     @staticmethod
     def load_moves(moves):
@@ -143,29 +165,7 @@ def draw():
     # Draw Battle for Gamestate = 1
     elif game.game_state == 1:
         game.display_battle_screen()
-        # Draw Red Xs
-        if run:
-            screen.blit('denied', (run_x_loc))
-        if bag:
-            screen.blit('denied', (bag_x_loc))
-        if party:
-            screen.blit('denied', (party_x_loc))
-        # Draw moves list if Fight is selected
-        if fight:
-            screen.blit('battle_moves', (0,224))
-            screen.draw.text("Move One", (mov_one_loc), color='black')
-            screen.draw.text("Move Two", (mov_two_loc), color='black')
-            screen.draw.text("Move Three", (mov_three_loc), color='black')
-            
-            
-        
-    
 
-def update():
-    
-    # Run Draw Function
-    draw()
-    #game.draw_screen()
 
 pgzrun.go()
 

@@ -100,12 +100,12 @@ class Deck:
         self.current_character = self.characters[self.pos]
         self.current_character.status = carry
 
-    def attack(self, prompt_move, opponent: BaseCharacter):
-        moves = self.current_character.moves
-        selected_move = prompt_move(moves)
-        self.current_character.do_move(selected_move)
-        opponent.take_dmg(selected_move, self.current_character.damage_boost)
+    def attack(self, move: BaseMove, opponent: BaseCharacter):
+        self.current_character.do_move(move)
+        opponent.take_dmg(move, self.current_character.damage_boost)
 
+    def bot_attack(self, opponent: BaseCharacter):
+        self.attack(random.choice(self.current_character.moves),opponent)
 
 class Player:
     def __init__(self, base_character: BaseCharacter, bot=False):
@@ -124,3 +124,53 @@ class Player:
     def current_character(self):
         return self.deck.current_character
 
+    @property
+    def attack(self):
+        return self.deck.bot_attack if self.bot else self.deck.attack
+
+
+class ChoiceMenu:
+    def __init__(self, choices: list[BaseMove], menu_type=1):
+        self.choices = choices
+        self.pos = 0
+        self.type = menu_type
+        self.denied = [False, False, False]
+
+    def handle_input(self, key, keys):
+        if key == keys.RIGHT:
+            if self.type == 0:
+                if self.pos < 3:
+                    self.pos += 1
+                else:
+                    self.pos = 0
+            else:
+                if self.pos < len(self.choices)-1:
+                    self.pos += 1
+                else:
+                    self.pos = 0
+        elif key == keys.LEFT:
+            if self.type == 0:
+                if self.pos > 0:
+                    self.pos -= 1
+                else:
+                    self.pos = 3
+            else:
+                if self.pos > 0:
+                    self.pos -= 1
+                else:
+                    self.pos = len(self.choices)-1
+        elif key == keys.SPACE:
+            if self.type == 0:
+                if self.pos > 0:
+                    self.denied[self.pos-1] = True
+                else:
+                    return True
+            else:
+                return True
+
+    @property
+    def choice(self):
+        if self.type == 0:
+            return self.pos
+        else:
+            return self.choices[self.pos]
