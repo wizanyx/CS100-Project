@@ -1,5 +1,5 @@
 characters = [
-    {
+    { # Player Characters
         "name": "Man",
         "hp": 100,
         "moves": [
@@ -12,6 +12,32 @@ characters = [
                 "dmg": 30,
                 "speed": 4,
                 "percent": True
+            }
+        ],
+        "camp": 0
+    }, {
+        "name": "Dario",
+        "hp": 120,
+        "moves": [
+            {
+                "name": "Jump",
+                "dmg": 30,
+                "speed": 2
+            }, {
+                "name": "Super Mushroom",
+                "dmg": 0,
+                "speed": 4,
+                "percent": True
+                "status": {
+                    "dmg_boost": 30,
+                    "def_boost": 30,
+                    "duration": 1
+                }
+            }, {
+                "name": "Clump",
+                "dmg": 0,
+                "speed": 3,
+                "percent": False
             }
         ],
         "camp": 0
