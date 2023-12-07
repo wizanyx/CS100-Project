@@ -6,11 +6,11 @@ characters = [
             {
                 "name": "Punch",
                 "dmg": 10,
-                "speed": 2
+                "desc": "You punch {enemy} and do {damage} damage.",
             }, {
                 "name": "Boink",
                 "dmg": 30,
-                "speed": 4,
+                "desc": "You hit {enemy} with a club and do {damage} damage.",
                 "percent": True
             }
         ],
@@ -22,11 +22,11 @@ characters = [
             {
                 "name": "Jump",
                 "dmg": 30,
-                "speed": 2
+                "desc": "Dario jumps on {enemy} and does {damage} damage.",
             }, {
                 "name": "Super Mushroom",
                 "dmg": 0,
-                "speed": 4,
+                "desc": "Dario eats a Super Mushroom and is powered up!",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -36,7 +36,7 @@ characters = [
             }, {
                 "name": "Clump",
                 "dmg": 0,
-                "speed": 3,
+                "desc": "Dario makes a... clump?",
                 "percent": False
             }
         ],
@@ -48,11 +48,11 @@ characters = [
             {
                 "name": "Jesus Kick",
                 "dmg": 15,
-                "speed": 2
+                "desc": "Fesus uses his ancient judo training to deliver a devestating kick that does {damage} damage."
             }, {
                 "name": "Jesus Lightning",
                 "dmg": 20,
-                "speed": 4,
+                "desc": "Holy crap! That awesome lightning just did {damage} damage.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 0,
@@ -62,7 +62,7 @@ characters = [
             }, {
                 "name": "Jesus Beam",
                 "dmg": 30,
-                "speed": 3,
+                "desc": "Jesus uses all of his chi to create a powerful blast of energy that does {damage} damage.",
                 "percent": False
             }
         ],
@@ -74,11 +74,11 @@ characters = [
             {
                 "name": "Mald",
                 "dmg": 25,
-                "speed": 2
+                "desc": "Wojak malds harder than he has ever malded before. {enemy} is worried and takes {damage} damage."
             }, {
                 "name": "Cope",
                 "dmg": 0,
-                "speed": 4,
+                "desc": "Wojak takes a swig of copium, and feels a little stronger.",
                 "status": {
                     "dmg_boost": 0,
                     "def_boost": 30,
@@ -94,7 +94,7 @@ characters = [
             {
                 "name": "Normal Punch",
                 "dmg": 2000,
-                "speed": 2
+                "desc": "Saitama does a normal punch, doing {damage} damage."
             }
         ],
         "camp": 0
@@ -105,11 +105,11 @@ characters = [
             {
                 "name": "Bite",
                 "dmg": 30,
-                "speed": 3
+                "desc": "The dog bites you and you take {damage} damage."
             }, {
                 "name": "Bark",
                 "dmg": 1,
-                "speed": 5,
+                "desc": "What an annoying dog.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -126,11 +126,11 @@ characters = [
             {
                 "name": "Bite",
                 "dmg": 30,
-                "speed": 3
+                "desc": "The dog bites you and you take {damage} damage."
             }, {
                 "name": "Bark",
                 "dmg": 1,
-                "speed": 5,
+                "desc": "What an annoying dog.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -140,7 +140,7 @@ characters = [
             }, {
                 "name": "Holy Crap",
                 "dmg": 10,
-                "speed": 3,
+                "desc": "The dog takes a crap, but it looks somehow... glorius!",
                 "percent": True,
                 "status": {
                     "dmg_boost": 10,
@@ -157,11 +157,11 @@ characters = [
             {
                 "name": "Bite",
                 "dmg": 30,
-                "speed": 3
+                "desc": "The dog bites you and you take {damage} damage."
             }, {
                 "name": "Bark",
                 "dmg": 1,
-                "speed": 5,
+                "desc": "What an annoying dog.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -171,7 +171,7 @@ characters = [
             }, {
                 "name": "Unholy Crap",
                 "dmg": 10,
-                "speed": 3,
+                "desc": "Call an exorcist, this crap is gross!",
                 "percent": True,
                 "status": {
                     "dmg_boost": 40,
@@ -188,11 +188,11 @@ characters = [
             {
                 "name": "Bite",
                 "dmg": 30,
-                "speed": 3
+                "desc": "The dog bites you and you take {damage} damage."
             }, {
                 "name": "Bark",
                 "dmg": 1,
-                "speed": 5,
+                "desc": "What an annoying dog.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -202,7 +202,7 @@ characters = [
             }, {
                 "name": "Unknowable Crap",
                 "dmg": 10,
-                "speed": 3,
+                "desc": "This crap is beyond your comprehension.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 40,
@@ -219,11 +219,11 @@ characters = [
             {
                 "name": "Shlong Swipe",
                 "dmg": 35,
-                "speed": 3
+                "desc": "Uhh, you take {damage} damage, I guess..."
             }, {
                 "name": "Quack",
                 "dmg": 1,
-                "speed": 5,
+                "desc": "What an annoying duck."
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -233,7 +233,7 @@ characters = [
             }, {
                 "name": "Bread Throw",
                 "dmg": 20,
-                "speed": 3,
+                "desc": "He just threw bread at you... how rude...",
                 "percent": True,
                 "status": {
                     "dmg_boost": 0,
@@ -243,7 +243,7 @@ characters = [
             }, {
                 "name": "Where is Mom",
                 "dmg": 0,
-                "speed": 3,
+                "desc": "Where did that cooked duck come from...",
                 "status": {
                     "dmg_boost": 0,
                     "def_boost": 40,
@@ -259,11 +259,11 @@ characters = [
             {
                 "name": "Bite of 87",
                 "dmg": 40,
-                "speed": 3
+                "desc": "WAS THAT THE BITE OF 87? Take {damage} damage."
             }, {
                 "name": "Kill Children",
                 "dmg": 10,
-                "speed": 5,
+                "desc": "Jreddy kills children in front of {player}. {player} takes {damage} damage from sadness.",
                 "percent": True,
                 "status": {
                     "def_boost": 0,
@@ -273,7 +273,7 @@ characters = [
             }, {
                 "name": "Ghostly Jazz",
                 "dmg": 0,
-                "speed": 3,
+                "desc": "Jreddy's soulful tunes will haunt you forever.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 0,
@@ -290,11 +290,11 @@ characters = [
             {
                 "name": "Cat Attack",
                 "dmg": 35,
-                "speed": 3
+                "desc": "Garfield uses his underground cat empire to deal {damage} damage."
             }, {
                 "name": "Monday Power",
                 "dmg": 15,
-                "speed": 5,
+                "desc": "Garfield channels his rage for the day monday to deal {damage} damage.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 50,
@@ -304,7 +304,7 @@ characters = [
             }, {
                 "name": "Good Meal",
                 "dmg": 0,
-                "speed": 3,
+                "desc": "He's gotta have a good meal",
                 "percent": True,
                 "status": {
                     "dmg_boost": 0,
@@ -321,7 +321,7 @@ characters = [
             {
                 "name": "Fail",
                 "dmg": 2000,
-                "speed": 3
+                "desc": "Professor Guarnera gives {player} a failing grade in cs102."
             }
         ],
         "camp": 1
