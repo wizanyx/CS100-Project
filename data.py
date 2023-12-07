@@ -53,8 +53,9 @@ characters = [
                 "name": "Jesus Lightning",
                 "dmg": 20,
                 "speed": 4,
-                "percent": True
+                "percent": True,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 15,
                     "duration": 4
                 }
@@ -79,6 +80,7 @@ characters = [
                 "dmg": 0,
                 "speed": 4,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 30,
                     "duration": 2
                 }
@@ -229,11 +231,12 @@ characters = [
                     "duration": 3
                 }
             }, {
-                "name": "Bread Toss",
+                "name": "Bread Throw",
                 "dmg": 20,
                 "speed": 3,
                 "percent": True,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 10,
                     "duration": 2
                 }
@@ -242,6 +245,7 @@ characters = [
                 "dmg": 0,
                 "speed": 3,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 40,
                     "duration": 2
                 }
@@ -262,7 +266,8 @@ characters = [
                 "speed": 5,
                 "percent": True,
                 "status": {
-                    "dmg_boost": 40
+                    "def_boost": 0,
+                    "dmg_boost": 40,
                     "duration": 1
                 }
             }, {
@@ -271,6 +276,7 @@ characters = [
                 "speed": 3,
                 "percent": True,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 50,
                     "duration": 2
                 }
@@ -292,6 +298,7 @@ characters = [
                 "percent": True,
                 "status": {
                     "dmg_boost": 50,
+                    "def_boost": 0,
                     "duration": 2
                 }
             }, {
@@ -300,6 +307,7 @@ characters = [
                 "speed": 3,
                 "percent": True,
                 "status": {
+                    "dmg_boost": 0,
                     "def_boost": 50,
                     "duration": 2
                 }
