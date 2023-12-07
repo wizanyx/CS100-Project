@@ -36,8 +36,20 @@ class Story:
         if STORY[self.stage]:
             return STORY[self.stage].pop(0)
 
+    @property
+    def stage_lines(self):
+        return STORY[self.stage]
+
+    @property
     def characters(self):
         if self.stage == 0:
             return [["Man"], ["Dog"]]
         elif self.stage == 1:
             return [["Man", "Dario"], ["Angel Dog", "Monald Muck"]]
+        elif self.stage == 2:
+            return [["Man", "Dario", "Fesus"], ["Devil Dog", "Monal Muck", "Jreddy Jazbear"]]
+        elif self.stage == 3:
+            return [["Man", "Dario", "Fesus", "Wojak"], ["Eldritch Dog", "Jreddy Jazbear", "Garfield"]]
+        else:
+            return [["Man", "Dario", "Fesus", "Wojak", "Saitama"], ["Drew Guarnera"]]
+

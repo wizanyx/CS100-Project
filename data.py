@@ -27,7 +27,7 @@ characters = [
                 "name": "Super Mushroom",
                 "dmg": 0,
                 "speed": 4,
-                "percent": True
+                "percent": True,
                 "status": {
                     "dmg_boost": 30,
                     "def_boost": 30,

@@ -96,6 +96,8 @@ class Deck:
         self.current_character = self.characters[0]
 
     def character_death(self):
+        if self.pos == len(self.characters)-1:
+            return True
         self.pos += 1
         carry = self.current_character.carry_status
         self.current_character = self.characters[self.pos]
@@ -117,7 +119,13 @@ class Player:
         self.bot = bot
 
     def new_deck(self):
+        random.shuffle(self.characters)
         self.deck = Deck(self.characters[:4])
+
+    def restore_stats(self):
+        for character in self.characters:
+            character.hp = character.hp_max
+            character.status = []
 
     @property
     def current_action(self):

@@ -2,6 +2,7 @@ import sys
 import pgzrun
 from structures import *
 from data import characters
+from story import Story
 
 # Basic Setup
 TITLE = 'Battle!'
@@ -50,6 +51,7 @@ class Game(object):
     def __init__(self):
         self.game_state = 0
         self.characters = {}
+        self.story = Story()
         self.choice_menu = ChoiceMenu([], 0)
         self.move_text_display = False
         self.display_log = []
@@ -63,6 +65,19 @@ class Game(object):
         for character in characters:
             character["moves"] = self.load_moves(character["moves"])
             self.characters[character["name"]] = (Character(**character))
+
+    def load_stage_characters(self):
+        self.player.characters = []
+        for character in self.story.characters[0]:
+            self.player.characters.append(self.characters[character])
+        self.player.new_deck()
+        self.player.restore_stats()
+
+        self.bot.characters = []
+        for character in self.story.characters[1]:
+            self.bot.characters.append(self.characters[character])
+        self.bot.new_deck()
+        self.player.restore_stats()
 
     def draw_screen(self):
         screen.fill((0, 0, 50))
@@ -85,7 +100,6 @@ class Game(object):
         screen.blit('dog', (300, 300))
 
     def display_battle_screen(self):
-        global screen
 
         # Battle Screen Background
         screen.blit('battle_background', (0, 0))
@@ -112,6 +126,14 @@ class Game(object):
         else:
             self.display_choice_menu()
 
+    def display_story_text(self):
+        screen.blit('story_background', (0, 0))
+        if self.story.stage_lines:
+            screen.draw.text(self.story.stage_lines[0], (32, 245), color='white')
+        else:
+            self.game_state = 1
+            self.display_battle_screen()
+            self.load_stage_characters()
 
     def display_choice_menu(self):
         if self.choice_menu.type == 0:
@@ -146,14 +168,23 @@ class Game(object):
                 else:
                     self.display_battle_text()
             else:
+                self.move_text_display = False
                 char = display_text[1]
                 screen.draw.text(f"{char.name} died! RIP!", (32, 245), color='white')
                 if char.camp == 0:
-                    self.player.deck.character_death()
+                    if self.player.deck.character_death():
+                        self.display_lose_screen()
                 else:
-                    self.bot.deck.character_death()
+                    if self.bot.deck.character_death():
+                        self.game_state = 2
+                        self.story.stage += 1
         else:
             screen.draw.text(display_text.name, (32, 245), color='white')
+
+    def display_lose_screen(self):
+        self.game_state = -1
+        screen.fill((100, 100, 150))
+        screen.blit('you_lost', (0, 0))
 
     def handle_inputs(self, key):
         if key == keys.ESCAPE:
@@ -161,7 +192,7 @@ class Game(object):
 
         if self.game_state == 0:
             if key == keys.SPACE:
-                self.game_state = 1
+                self.game_state = 2
         elif self.game_state == 1 and not self.move_text_display:
             if self.choice_menu.handle_input(key, keys):
                 if self.choice_menu.choice == 0:
@@ -176,6 +207,11 @@ class Game(object):
         elif self.move_text_display:
             if key == keys.SPACE:
                 del self.display_log[0]
+        elif self.game_state == 2:
+            if key == keys.SPACE:
+                del self.story.stage_lines[0]
+        elif self.game_state == -1:
+            self.display_lose_screen()
 
     @staticmethod
     def load_moves(moves):
@@ -204,6 +240,8 @@ def draw():
     # Draw Battle for Gamestate = 1
     elif game.game_state == 1:
         game.display_battle_screen()
+    elif game.game_state == 2:
+        game.display_story_text()
 
 
 pgzrun.go()
