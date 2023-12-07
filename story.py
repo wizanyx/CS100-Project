@@ -46,7 +46,7 @@ STORY = [[
     "IT IS FESUS!!!",
     "Fesus turns around and looks at you...",
     "You faintly hear a sigh escape his mouth.",
-    "For sure it must have been your imagination..."
+    "For sure it must have been your imagination...",
     "But suddenly, you dont have time to think anymore.",
     "For you see it once again..."
 ], [
@@ -103,9 +103,9 @@ class Story:
         elif self.stage == 1:
             return [["Man", "Dario"], ["Angel Dog", "Monal Muck"]]
         elif self.stage == 2:
-            return [["Man", "Dario", "Fesus"], ["Devil Dog", "Monal Muck", "Jreddy Jazbear"]]
+            return [["Man", "Dario", "Fesus"], ["Devil Dog", "Monal Muck", "Jreddy Jazzbear"]]
         elif self.stage == 3:
-            return [["Man", "Dario", "Fesus", "Wojak"], ["Eldritch Dog", "Jreddy Jazbear", "Garfield"]]
+            return [["Man", "Dario", "Fesus", "Wojak"], ["Eldritch Dog", "Jreddy Jazzbear", "Garfield"]]
         elif self.stage == 4:
             return [["Man", "Dario", "Fesus", "Wojak", "Saitama"], ["Professor Guarnera"]]
 

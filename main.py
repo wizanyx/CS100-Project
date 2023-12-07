@@ -10,7 +10,6 @@ WIDTH = 480
 HEIGHT = 320
 
 # Graphics Locations
-
 PLAYER_HP_BAR_LOC = 348, 182
 PLAYER_NAME_LOC = 284, 158
 PLAYER_SPITE_LOC = 51, 96
@@ -19,25 +18,18 @@ BOT_HP_BAR_LOC = 104, 66
 BOT_NAME_LOC = 42, 42
 BOT_SPRITE_LOC = 283, 13
 
-
-run = False
-party = False
-bag = False
-fight = False
-
 DENIED_CHOICE_LOC = [(366, 239), (266, 273), (366, 270)]
-MOVE_CHOICE_LOC = [(32, 245), (172, 245), (32, 274)]
+MOVE_CHOICE_LOC = [(32, 245), (172, 265), (32, 285)]
 CHOICE_ARROW_LOC = [(258, 248), (370, 248), (258, 280), (370, 280)]
-MOVE_ARROW_LOC = [(20, 245), (160, 245), (20, 274)]
+MOVE_ARROW_LOC = [(20, 245), (160, 265), (20, 285)]
 
-
-
-gamestate = 0
 
 class Move(BaseMove):
-    def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
-        BaseMove.__init__(self, name, dmg, speed, percent, status)
+    def __init__(self, name: str, dmg: int, speed: int, camp, percent: bool = False, status: Status = None):
+        BaseMove.__init__(self, name, dmg, speed, camp, percent, status)
         self.actor = Actor("moves/" + self.name.lower().replace(" ", "_"))
+        self.actor.topleft = PLAYER_SPITE_LOC if self.camp == 1 else BOT_SPRITE_LOC
+
 
 
 class Character(BaseCharacter):
@@ -63,7 +55,7 @@ class Game(object):
 
     def load_characters(self):
         for character in characters:
-            character["moves"] = self.load_moves(character["moves"])
+            character["moves"] = self.load_moves(character["moves"], character["camp"])
             self.characters[character["name"]] = (Character(**character))
 
     def load_stage_characters(self):
@@ -77,7 +69,8 @@ class Game(object):
         for character in self.story.characters[1]:
             self.bot.characters.append(self.characters[character])
         self.bot.new_deck()
-        self.player.restore_stats()
+        self.bot.restore_stats()
+        self.choice_menu = ChoiceMenu(self.player.current_character.moves)
 
     def draw_screen(self):
         screen.fill((0, 0, 50))
@@ -129,11 +122,12 @@ class Game(object):
     def display_story_text(self):
         screen.blit('story_background', (0, 0))
         if self.story.stage_lines:
-            screen.draw.text(self.story.stage_lines[0], (32, 245), color='white')
+            screen.draw.text(self.story.stage_lines[0], (15, 245), color='black')
         else:
-            self.game_state = 1
+            if self.story.stage > 0:
+                self.load_stage_characters()
             self.display_battle_screen()
-            self.load_stage_characters()
+            self.game_state = 1
 
     def display_choice_menu(self):
         if self.choice_menu.type == 0:
@@ -159,7 +153,7 @@ class Game(object):
         if type(display_text) == str:
             screen.draw.text(display_text, (32, 245), color='white')
         elif type(display_text) == tuple:
-            print(self.display_log)
+            print('2', self.display_log)
             if display_text[0]:
                 del self.display_log[0]
                 if not self.display_log:
@@ -168,17 +162,24 @@ class Game(object):
                 else:
                     self.display_battle_text()
             else:
-                self.move_text_display = False
+                print(3, self.display_log)
+                del self.display_log[0]
                 char = display_text[1]
                 screen.draw.text(f"{char.name} died! RIP!", (32, 245), color='white')
                 if char.camp == 0:
                     if self.player.deck.character_death():
+                        self.move_text_display = False
                         self.display_lose_screen()
+                    self.choice_menu = ChoiceMenu(self.player.current_character.moves)
                 else:
                     if self.bot.deck.character_death():
+                        self.move_text_display = False
                         self.game_state = 2
                         self.story.stage += 1
+                        if self.story.stage == 5:
+                            self.win_screen()
         else:
+            display_text.actor.draw()
             screen.draw.text(display_text.name, (32, 245), color='white')
 
     def display_lose_screen(self):
@@ -186,10 +187,15 @@ class Game(object):
         screen.fill((100, 100, 150))
         screen.blit('you_lost', (0, 0))
 
+    def win_screen(self):
+        self.game_state = -2
+        screen.fill((100, 100, 150))
+        screen.blit('you_win', (0, 0))
+
     def handle_inputs(self, key):
         if key == keys.ESCAPE:
             sys.exit()
-
+        print(self.player.current_character.hp, self.bot.current_character.hp)
         if self.game_state == 0:
             if key == keys.SPACE:
                 self.game_state = 2
@@ -198,7 +204,7 @@ class Game(object):
                 if self.choice_menu.choice == 0:
                     self.choice_menu = ChoiceMenu(self.player.current_character.moves)
                 else:
-                    print(self.display_log)
+                    print(1, self.display_log)
                     player_result = self.player.attack(self.choice_menu.choice, self.bot.current_character)
                     self.display_log.extend(player_result)
                     if player_result[2][0]:
@@ -206,21 +212,27 @@ class Game(object):
                     self.move_text_display = True
         elif self.move_text_display:
             if key == keys.SPACE:
-                del self.display_log[0]
+                if not self.display_log:
+                    self.move_text_display = False
+                else:
+                    del self.display_log[0]
         elif self.game_state == 2:
             if key == keys.SPACE:
                 del self.story.stage_lines[0]
+
         elif self.game_state == -1:
             self.display_lose_screen()
+        elif self.game_state == -2:
+            self.win_screen()
 
     @staticmethod
-    def load_moves(moves):
+    def load_moves(moves, camp):
         _moves = []
         for move in moves:
             if move.get("status"):
                 status = Status(**move["status"])
                 move["status"] = status
-            _moves.append(Move(**move))
+            _moves.append(Move(**move, camp=camp))
         return _moves
 
 

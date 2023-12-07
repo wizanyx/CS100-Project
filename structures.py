@@ -10,12 +10,13 @@ class Status:
 
 
 class BaseMove:
-    def __init__(self, name: str, dmg: int, speed: int, percent: bool = False, status: Status = None):
+    def __init__(self, name: str, dmg: int, speed: int, camp, percent: bool = False, status: Status = None):
         self.name = name
         self.speed = speed
         self.dmg = dmg
         self.percent = percent
         self.status = status
+        self.camp = camp
 
 
 class BaseCharacter:
@@ -120,7 +121,7 @@ class Player:
 
     def new_deck(self):
         random.shuffle(self.characters)
-        self.deck = Deck(self.characters[:4])
+        self.deck = Deck(self.characters[:3])
 
     def restore_stats(self):
         for character in self.characters:

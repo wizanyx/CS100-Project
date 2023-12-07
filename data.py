@@ -31,7 +31,7 @@ characters = [
                 "status": {
                     "dmg_boost": 30,
                     "def_boost": 30,
-                    "duration": 1
+                    "duration": 3
                 }
             }, {
                 "name": "Clump",
