@@ -42,7 +42,7 @@ characters = [
         ],
         "camp": 0
     }, {
-        "name": "Jesus",
+        "name": "Fesus",
         "hp": 150,
         "moves": [
             {
@@ -182,7 +182,7 @@ characters = [
         ],
         "camp": 1
     }, {
-        "name": "Elder Dog",
+        "name": "Eldritch Dog",
         "hp": 140,
         "moves": [
             {
