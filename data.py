@@ -1,5 +1,5 @@
 characters = [
-    { # Player Characters
+    {  # Player Characters
         "name": "Man",
         "hp": 100,
         "moves": [
@@ -74,7 +74,8 @@ characters = [
             {
                 "name": "Mald",
                 "dmg": 25,
-                "desc": "Wojak malds harder than he has ever malded before. {enemy} is worried and takes {damage} damage."
+                "desc": "Wojak malds harder than he has ever malded before. {enemy} is worried and takes {damage} "
+                        "damage."
             }, {
                 "name": "Cope",
                 "dmg": 0,
@@ -98,7 +99,7 @@ characters = [
             }
         ],
         "camp": 0
-    }, { # Bot Characters
+    }, {  # Bot Characters
         "name": "Dog",
         "hp": 80,
         "moves": [

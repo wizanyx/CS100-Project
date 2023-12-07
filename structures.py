@@ -141,10 +141,6 @@ class Player:
             character.status = []
 
     @property
-    def current_action(self):
-        return ""
-
-    @property
     def current_character(self):
         return self.deck.current_character
 

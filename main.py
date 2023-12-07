@@ -31,7 +31,6 @@ class Move(BaseMove):
         self.actor.topleft = PLAYER_SPITE_LOC if self.camp == 1 else BOT_SPRITE_LOC
 
 
-
 class Character(BaseCharacter):
     def __init__(self, name: str, hp: int, moves: list[Move], camp: int):
         BaseCharacter.__init__(self, name, hp, moves, camp)
@@ -71,15 +70,6 @@ class Game(object):
         self.bot.new_deck()
         self.bot.restore_stats()
         self.choice_menu = ChoiceMenu(self.player.current_character.moves)
-
-    def draw_screen(self):
-        screen.fill((0, 0, 50))
-
-        if self.game_state == 0:
-            print(self.game_state)
-            self.display_main_screen()
-        elif self.game_state == 1:
-            self.display_battle_screen()
 
     @staticmethod
     def display_main_screen():

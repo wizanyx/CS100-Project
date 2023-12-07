@@ -88,10 +88,6 @@ class Story:
     def __init__(self):
         self.stage = 0
 
-    def next_line(self):
-        if STORY[self.stage]:
-            return STORY[self.stage].pop(0)
-
     @property
     def stage_lines(self):
         return STORY[self.stage]
