@@ -25,8 +25,8 @@ MOVE_ARROW_LOC = [(20, 245), (160, 265), (20, 285)]
 
 
 class Move(BaseMove):
-    def __init__(self, name: str, dmg: int, speed: int, camp, percent: bool = False, status: Status = None):
-        BaseMove.__init__(self, name, dmg, speed, camp, percent, status)
+    def __init__(self, name: str, dmg: int, camp, desc, percent: bool = False, status: Status = None):
+        BaseMove.__init__(self, name, dmg, camp, desc, percent, status)
         self.actor = Actor("moves/" + self.name.lower().replace(" ", "_"))
         self.actor.topleft = PLAYER_SPITE_LOC if self.camp == 1 else BOT_SPRITE_LOC
 
@@ -180,7 +180,7 @@ class Game(object):
                             self.win_screen()
         else:
             display_text.actor.draw()
-            screen.draw.text(display_text.name, (32, 245), color='white')
+            screen.draw.text(display_text.desc, (32, 245), width=400, color='white')
 
     def display_lose_screen(self):
         self.game_state = -1

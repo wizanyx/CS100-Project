@@ -223,7 +223,7 @@ characters = [
             }, {
                 "name": "Quack",
                 "dmg": 1,
-                "desc": "What an annoying duck."
+                "desc": "What an annoying duck.",
                 "percent": True,
                 "status": {
                     "dmg_boost": 30,
@@ -263,7 +263,7 @@ characters = [
             }, {
                 "name": "Kill Children",
                 "dmg": 10,
-                "desc": "Jreddy kills children in front of {player}. {player} takes {damage} damage from sadness.",
+                "desc": "Jreddy kills children in front of {enemy}. {enemy} takes {damage} damage from sadness.",
                 "percent": True,
                 "status": {
                     "def_boost": 0,
@@ -321,7 +321,7 @@ characters = [
             {
                 "name": "Fail",
                 "dmg": 2000,
-                "desc": "Professor Guarnera gives {player} a failing grade in cs102."
+                "desc": "Professor Guarnera gives {enemy} a failing grade in cs102."
             }
         ],
         "camp": 1

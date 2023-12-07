@@ -10,13 +10,22 @@ class Status:
 
 
 class BaseMove:
-    def __init__(self, name: str, dmg: int, speed: int, camp, percent: bool = False, status: Status = None):
+    def __init__(self, name: str, dmg: int, camp, desc, percent: bool = False, status: Status = None):
         self.name = name
-        self.speed = speed
         self.dmg = dmg
         self.percent = percent
         self.status = status
         self.camp = camp
+        self._desc = desc
+        self.curr_desc = {
+            "enemy": "",
+            "damage": 0,
+            "player": ""
+        }
+
+    @property
+    def desc(self):
+        return self._desc.format(**self.curr_desc)
 
 
 class BaseCharacter:
@@ -43,6 +52,8 @@ class BaseCharacter:
         self.hp -= final_dmg
 
         self.update_status()
+        move.curr_desc["damage"] = final_dmg
+        move.curr_desc["enemy"] = self.name
         return self.alive
 
     def update_status(self):
@@ -106,6 +117,7 @@ class Deck:
 
     def attack(self, move: BaseMove, opponent: BaseCharacter):
         self.current_character.do_move(move)
+        move.curr_desc["player"] = self.current_character.name
         alive = opponent.take_dmg(move, self.current_character.damage_boost)
         return [f"{self.current_character.name} used {move.name}!", move, (alive, opponent)]
 
