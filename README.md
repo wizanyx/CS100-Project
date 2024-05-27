@@ -1,2 +1,2 @@
-# Pokememe-Battle-Simulator
-Dumb Pokemon Battle Simulator(?) but the pokemons are memes
+# Wooster CS100 Project
+PyGame Final Project for CS100 class at College of Wooster.
